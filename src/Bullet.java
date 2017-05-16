@@ -35,7 +35,7 @@ public class Bullet implements Mappable{
     }
 
     public boolean isOutOfScreenBounds() {
-        return x_position > MainView.SCREEN_WIDTH || x_position < 0 || y_position < 0 || y_position > MainView.SCREEN_HEIGHT;
+        return x_position > SpaceWarViewController.SCREEN_WIDTH || x_position < 0 || y_position < 0 || y_position > SpaceWarViewController.SCREEN_HEIGHT;
     }
 
     public double getDamage() {

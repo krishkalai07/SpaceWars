@@ -20,7 +20,7 @@ public class Main {
         */
 
         JFrame window = new JFrame("Space Wars");
-        MainView content = new MainView();
+        SpaceWarViewController content = new SpaceWarViewController();
         window.setContentPane(content);
         window.setSize(700, 430);
         window.setLocation(100, 100);

@@ -1,3 +1,5 @@
+import sun.jvm.hotspot.memory.Space;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,7 +11,7 @@ import java.util.Vector;
  * Date:    5/5/17
  * VERSION: 1
  */
-public class MainView extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
+public class SpaceWarViewController extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
     public static final int DEFAULT_BULLET_VELOCITY = 2;
     public static final int SCREEN_WIDTH = 700;
     public static final int SCREEN_HEIGHT = 430;
@@ -17,22 +19,27 @@ public class MainView extends JPanel implements MouseListener, MouseMotionListen
     private Spaceship user_spaceship;
     private Vector<Bullet> bullets;
     private Vector<Asteroid> asteroids;
+    private Vector<Spaceship> spaceships;
+
+    private Map map;
 
     private int mouse_x;
     private int mouse_y;
 
     private Timer timer;
-    int tick_numeric;
+    private int tick_numeric;
 
-    MainView () {
+    SpaceWarViewController () {
         setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         setBackground(new Color(0,0,0));
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        spaceship = new Spaceship(700-20, 430-40);
+        user_spaceship = new Spaceship(700-20, 430-40);
         bullets = new Vector<>();
         asteroids = new Vector<>();
+
+        map = new Map(SCREEN_WIDTH, SCREEN_HEIGHT);
 
         mouse_x = 0;
         mouse_y = 0;
@@ -40,12 +47,14 @@ public class MainView extends JPanel implements MouseListener, MouseMotionListen
         tick_numeric = 0;
         timer = new Timer(20, this);
         timer.start();
+
+        map.set(user_spaceship);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        spaceship.draw(g, mouse_x, mouse_y);
+        user_spaceship.draw(g, mouse_x, mouse_y);
         for (int i = 0; i < bullets.size();) {
             if (bullets.get(i).isOutOfScreenBounds()) {
                 bullets.remove(i);
@@ -67,7 +76,7 @@ public class MainView extends JPanel implements MouseListener, MouseMotionListen
     @Override
     public void mouseClicked(MouseEvent e) {
         System.out.println("clicked");
-        Bullet bullet = new Bullet(spaceship.getAngle(), DEFAULT_BULLET_VELOCITY, spaceship.getLocation().getLatitude(), spaceship.getLocation().getLongitude(), 20.);
+        Bullet bullet = new Bullet(user_spaceship.getAngle(), DEFAULT_BULLET_VELOCITY, user_spaceship.getVirtualX(), user_spaceship.getVirtualY(), 20.);
         bullets.add(bullet);
         repaint();
     }
@@ -99,7 +108,7 @@ public class MainView extends JPanel implements MouseListener, MouseMotionListen
     @Override
     public void mouseDragged(MouseEvent e){
         if (tick_numeric % 10 == 0) {
-            Bullet bullet = new Bullet(spaceship.getAngle(), DEFAULT_BULLET_VELOCITY, spaceship.getLocation().getLatitude(), spaceship.getLocation().getLongitude(), 20.);
+            Bullet bullet = new Bullet(user_spaceship.getAngle(), DEFAULT_BULLET_VELOCITY, user_spaceship.getVirtualX(), user_spaceship.getVirtualY(), 20.);
             bullets.add(bullet);
         }
         mouse_x = e.getX();
