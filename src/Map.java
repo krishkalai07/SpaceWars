@@ -9,20 +9,21 @@ public class Map {
     public final static int MAP_WIDTH = SpaceWarViewController.SCREEN_WIDTH * 2;
     public final static int MAP_HEIGHT = SpaceWarViewController.SCREEN_HEIGHT * 2;
 
-    private Vector<Mappable> map;
+    private Mappable[][] item_location;
     private int num_rows;
     private int num_cols;
-
     public Map(int width, int height) {
-        map = new Vector<>();
+        item_location = new Mappable[width][height];
 
         this.num_rows = width;
         this.num_cols = height;
     }
 
-    public void set(Mappable item) {
-        map.add(item);
+    public void set(Mappable item, int row, int col) {
+        item_location[row][col] = item;
     }
 
-
+    public void remove(int row, int col) {
+        item_location[row][col] = null;
+    }
 }

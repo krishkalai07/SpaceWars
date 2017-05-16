@@ -22,7 +22,6 @@ public class Triangle {
                             (int)(origin_y + radius * cos(toRadians(heading+240+180)))};
         g.drawPolygon(triangle_x, triangle_y, 3);
 
-        /*
         int []triangle_x2 = {(int)(origin_x + (radius/2) * sin(toRadians(heading))),
                              (int)(origin_x + (radius/2) * sin(toRadians(heading+120))),
                              (int)(origin_x + (radius/2) * sin(toRadians(heading+240)))};
@@ -31,6 +30,5 @@ public class Triangle {
                              (int)(origin_y + (radius/2) * cos(toRadians(heading+240)))};
 
         g.drawPolygon(triangle_x2, triangle_y2, 3);
-        */
     }
 }

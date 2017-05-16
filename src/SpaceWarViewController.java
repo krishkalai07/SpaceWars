@@ -1,4 +1,4 @@
-import sun.jvm.hotspot.memory.Space;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,10 +16,10 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
     public static final int SCREEN_WIDTH = 700;
     public static final int SCREEN_HEIGHT = 430;
 
-    private Spaceship user_spaceship;
     private Vector<Bullet> bullets;
     private Vector<Asteroid> asteroids;
-    private Vector<Spaceship> spaceships;
+    private UserSpaceship user_spaceship;
+    private Vector<Spaceship> enemy_spaceships;
 
     private Map map;
 
@@ -35,11 +35,11 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        user_spaceship = new Spaceship(700-20, 430-40);
+        user_spaceship = new UserSpaceship(700-20, 430-40);
         bullets = new Vector<>();
         asteroids = new Vector<>();
 
-        map = new Map(SCREEN_WIDTH, SCREEN_HEIGHT);
+        map = new Map(SCREEN_WIDTH*2, SCREEN_HEIGHT*2);
 
         mouse_x = 0;
         mouse_y = 0;
@@ -48,13 +48,16 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
         timer = new Timer(20, this);
         timer.start();
 
-        map.set(user_spaceship);
+        map.set(user_spaceship, Map.MAP_WIDTH/2, Map.MAP_HEIGHT/2);
+
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         user_spaceship.draw(g, mouse_x, mouse_y);
+        user_spaceship.updateLocation();
+        System.out.println(user_spaceship.getMappableX() + " " + user_spaceship.getMappableY());
         for (int i = 0; i < bullets.size();) {
             if (bullets.get(i).isOutOfScreenBounds()) {
                 bullets.remove(i);
@@ -67,10 +70,9 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
             bullet.draw(g);
             bullet.updatePosition();
         }
-        for (Asteroid asteroid:asteroids) {
-            asteroid.draw(g);
-            //asteroid.updateLocation();
-        }
+        //for (Asteroid asteroid:asteroids) {
+        //    asteroid.draw(g);
+        //}
     }
 
     @Override
