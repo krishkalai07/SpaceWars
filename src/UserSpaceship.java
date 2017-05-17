@@ -1,5 +1,9 @@
 import java.awt.*;
 
+import static java.lang.StrictMath.cos;
+import static java.lang.StrictMath.sin;
+import static java.lang.StrictMath.toRadians;
+
 /**
  * AUTHOR:  Krish Kalai
  * Date:    5/16/17
@@ -24,12 +28,10 @@ public class UserSpaceship extends Spaceship {
             angle += 180;
         }
         Triangle.draw(g, virtual_x_position, virtual_y_position, angle);
-
-        mappable_x_position += velocity*StrictMath.sin(StrictMath.toRadians(angle+180));
     }
 
     public void updateLocation() {
-        mappable_x_position += (int)(velocity*StrictMath.sin(StrictMath.toRadians(angle+180)));
-        mappable_y_position += (int)(velocity*StrictMath.cos(StrictMath.toRadians(angle+180)));
+        mappable_x_position += velocity*StrictMath.sin(StrictMath.toRadians(angle+180));
+        mappable_y_position += velocity*StrictMath.cos(StrictMath.toRadians(angle+180));
     }
 }

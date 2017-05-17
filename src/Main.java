@@ -27,6 +27,5 @@ public class Main {
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.setVisible(true);
-
     }
 }

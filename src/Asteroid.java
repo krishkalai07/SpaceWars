@@ -1,6 +1,10 @@
-import sun.tools.javac.*;
-
 import java.awt.*;
+
+import static java.lang.StrictMath.sin;
+import static java.lang.StrictMath.random;
+import static java.lang.StrictMath.cos;
+import static java.lang.StrictMath.pow;
+import static java.lang.StrictMath.toRadians;
 
 /**
  * AUTHOR:  Krish Kalai
@@ -13,28 +17,39 @@ public class Asteroid implements Mappable {
     private double velocity;
     private double direction;
 
-    private double x_position;
-    private double y_position;
+    private double virtual_x_position;
+    private double virtual_y_position;
     private int radius;
+
+    private int mappable_x_position;
+    private int mappable_y_position;
+
+    HPBar health_bar;
 
     public Asteroid(int radius) {
         this.radius = radius;
         full_hp = radius * 3.1415926f;
         current_hp = full_hp;
-        x_position = StrictMath.random() * SpaceWarViewController.SCREEN_WIDTH;
-        y_position = StrictMath.random() * SpaceWarViewController.SCREEN_HEIGHT;
+        virtual_x_position = random() * SpaceWarViewController.SCREEN_WIDTH;
+        virtual_y_position = random() * SpaceWarViewController.SCREEN_HEIGHT;
 
         velocity = 3;
-        direction = StrictMath.random() * 360;
+        direction = random() * 360;
+
+        mappable_x_position = (int)(Math.random() * Map.MAP_WIDTH);
+        mappable_y_position = (int)(Math.random() * Map.MAP_HEIGHT);
+
+        health_bar = new HPBar((int)full_hp, (int)current_hp);
     }
 
     public void draw(Graphics g) {
-        g.drawOval((int)x_position-radius, (int)y_position-5, radius, radius);
+        g.drawOval((int) virtual_x_position - radius, (int) virtual_y_position - radius, radius, radius);
+        health_bar.draw(g, (int)virtual_x_position, (int)virtual_y_position);
     }
 
     public void updateLocation() {
-        x_position += velocity*StrictMath.sin(StrictMath.toRadians(direction+180));
-        y_position += velocity*StrictMath.cos(StrictMath.toRadians(direction+180));
+        virtual_x_position += velocity* sin(toRadians(direction+180));
+        virtual_y_position += velocity* cos(toRadians(direction+180));
     }
 
     public boolean hasLostAllHP() {
@@ -43,5 +58,10 @@ public class Asteroid implements Mappable {
 
     public void updateHP(double damage_value) {
         current_hp -= damage_value;
+        health_bar.setPartialHealth(current_hp);
+    }
+
+    public boolean isInsideCircle(int x, int y) {
+        return pow (x-virtual_x_position+radius,2) + pow (y-virtual_y_position+radius,2) <= pow(radius,2);
     }
 }

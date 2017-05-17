@@ -15,15 +15,13 @@ public class EnemySpaceship extends Spaceship{
         this.virtual_x_position = -1;
     }
 
-    public void draw(Graphics g, int mouse_x, int mouse_y) {
-        double x_fraction = mouse_x-virtual_x_position;
-        double y_fraction = mouse_y-virtual_y_position;
-        angle = (StrictMath.toDegrees(StrictMath.atan(x_fraction/y_fraction)));
-        if (mouse_y >= virtual_y_position) {
-            angle += 180;
-        }
+    public void draw(Graphics g, int x_distance_from_user, int y_distance_from_user) {
         Triangle.draw(g, virtual_x_position, virtual_y_position, angle);
+    }
 
+    public void updateLocation() {
         mappable_x_position += velocity*StrictMath.sin(StrictMath.toRadians(angle+180));
+        mappable_x_position += velocity*StrictMath.cos(StrictMath.toRadians(angle+180));
+        angle += Math.random() * 2 == 1 ? 1 : -1;
     }
 }

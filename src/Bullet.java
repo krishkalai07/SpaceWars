@@ -26,12 +26,8 @@ public class Bullet implements Mappable{
     }
 
     public void updatePosition() {
-        System.out.println(direction);
-        System.out.println(StrictMath.sin(StrictMath.toRadians(direction+180)) + ", " + StrictMath.cos(StrictMath.toRadians(direction+180)));
-        System.out.println();
         x_position += velocity*StrictMath.sin(StrictMath.toRadians(direction+180));
         y_position += velocity*StrictMath.cos(StrictMath.toRadians(direction+180));
-        System.out.println(x_position + ", " + y_position);
     }
 
     public boolean isOutOfScreenBounds() {
@@ -40,5 +36,13 @@ public class Bullet implements Mappable{
 
     public double getDamage() {
         return damage;
+    }
+
+    public double getXPosition() {
+        return x_position;
+    }
+
+    public double getYPosition() {
+        return y_position;
     }
 }

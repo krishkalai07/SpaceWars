@@ -1,4 +1,3 @@
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +14,7 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
     public static final int DEFAULT_BULLET_VELOCITY = 2;
     public static final int SCREEN_WIDTH = 700;
     public static final int SCREEN_HEIGHT = 430;
+    //public static final int NUMBER_OF_ENEMIES = 5;
 
     private Vector<Bullet> bullets;
     private Vector<Asteroid> asteroids;
@@ -38,6 +38,7 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
         user_spaceship = new UserSpaceship(700-20, 430-40);
         bullets = new Vector<>();
         asteroids = new Vector<>();
+        enemy_spaceships = new Vector<>();
 
         map = new Map(SCREEN_WIDTH*2, SCREEN_HEIGHT*2);
 
@@ -50,6 +51,9 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
 
         map.set(user_spaceship, Map.MAP_WIDTH/2, Map.MAP_HEIGHT/2);
 
+        EnemySpaceship spaceship = new EnemySpaceship(90, 50, 90);
+        map.set(spaceship, 50, 90);
+        enemy_spaceships.add(spaceship);
     }
 
     @Override
@@ -57,7 +61,6 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
         super.paintComponent(g);
         user_spaceship.draw(g, mouse_x, mouse_y);
         user_spaceship.updateLocation();
-        System.out.println(user_spaceship.getMappableX() + " " + user_spaceship.getMappableY());
         for (int i = 0; i < bullets.size();) {
             if (bullets.get(i).isOutOfScreenBounds()) {
                 bullets.remove(i);
@@ -70,14 +73,14 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
             bullet.draw(g);
             bullet.updatePosition();
         }
-        //for (Asteroid asteroid:asteroids) {
-        //    asteroid.draw(g);
-        //}
+        //((EnemySpaceship)(enemy_spaceships.get(0))).draw(g, );
+        for (Asteroid asteroid:asteroids) {
+            asteroid.draw(g);
+        }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println("clicked");
         Bullet bullet = new Bullet(user_spaceship.getAngle(), DEFAULT_BULLET_VELOCITY, user_spaceship.getVirtualX(), user_spaceship.getVirtualY(), 20.);
         bullets.add(bullet);
         repaint();
@@ -85,7 +88,6 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println("mousePressed");
     }
 
     @Override
@@ -132,10 +134,22 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
         repaint();
         tick_numeric++;
 
-        //if (tick_numeric % 100 == 0) {
-            //Asteroid asteroid = new Asteroid((int)(StrictMath.random() * 20) + 8); //size from 3 to 8
-            //asteroids.add(asteroid);
-            //System.out.println("added an asteroid"); //TODO: DEBUG
-        //}
+        for(Asteroid asteroid:asteroids) {
+            for (int j = 0; j < bullets.size(); j++) {
+                if (asteroid.isInsideCircle((int)bullets.get(j).getXPosition(), (int)bullets.get(j).getYPosition())) {
+                    asteroid.updateHP(bullets.get(j).getDamage());
+                    bullets.remove(j);
+                }
+            }
+        }
+        for (int i = 0; i < asteroids.size(); i++) {
+            if (asteroids.get(i).hasLostAllHP()) {
+                asteroids.remove(i);
+            }
+        }
+
+        if (tick_numeric % 20 == 0 && asteroids.size() <= 1) {
+            asteroids.add(new Asteroid((int)(Math.random() * 30) + 15));
+        }
     }
 }
