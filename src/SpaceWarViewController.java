@@ -148,8 +148,8 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
             }
         }
 
-        if (tick_numeric % 20 == 0 && asteroids.size() <= 1) {
-            asteroids.add(new Asteroid((int)(Math.random() * 30) + 15));
+        if (tick_numeric % 20 == 0 && asteroids.size() < 1) {
+            asteroids.add(new Asteroid(60));
         }
     }
 }

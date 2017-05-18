@@ -30,8 +30,11 @@ public class Asteroid implements Mappable {
         this.radius = radius;
         full_hp = radius * 3.1415926f;
         current_hp = full_hp;
-        virtual_x_position = random() * SpaceWarViewController.SCREEN_WIDTH;
-        virtual_y_position = random() * SpaceWarViewController.SCREEN_HEIGHT;
+        //virtual_x_position = random() * SpaceWarViewController.SCREEN_WIDTH;
+        //virtual_y_position = random() * SpaceWarViewController.SCREEN_HEIGHT;
+
+        virtual_x_position = 550;
+        virtual_y_position = 330;
 
         velocity = 3;
         direction = random() * 360;
@@ -62,6 +65,7 @@ public class Asteroid implements Mappable {
     }
 
     public boolean isInsideCircle(int x, int y) {
-        return pow (x-virtual_x_position+radius,2) + pow (y-virtual_y_position+radius,2) <= pow(radius,2);
+        System.out.println(pow (x-virtual_x_position,2) + pow (y-virtual_y_position,2) + " " + pow(radius,2));
+        return pow (x-virtual_x_position,2) + pow (y-virtual_y_position,2) <= pow(radius,2);
     }
 }
