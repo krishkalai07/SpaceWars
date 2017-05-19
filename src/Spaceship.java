@@ -11,6 +11,11 @@ public abstract class Spaceship implements Mappable {
     protected double angle;
     protected double velocity;
 
+    protected HPBar health;
+
+    protected double full_hp;
+    protected double current_hp;
+
     public double getAngle() {
         return angle;
     }

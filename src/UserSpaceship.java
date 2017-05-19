@@ -18,6 +18,11 @@ public class UserSpaceship extends Spaceship {
         mappable_y_position = Map.MAP_HEIGHT/2;
 
         velocity = 2;
+
+        full_hp = 100;
+        current_hp = full_hp;
+
+        health = new HPBar(100, 100);
     }
 
     public void draw(Graphics g, int mouse_x, int mouse_y) {
@@ -28,10 +33,20 @@ public class UserSpaceship extends Spaceship {
             angle += 180;
         }
         Triangle.draw(g, virtual_x_position, virtual_y_position, angle);
+        health.draw(g, virtual_x_position, virtual_y_position);
     }
 
     public void updateLocation() {
         mappable_x_position += velocity*StrictMath.sin(StrictMath.toRadians(angle+180));
         mappable_y_position += velocity*StrictMath.cos(StrictMath.toRadians(angle+180));
+    }
+
+    public void reduceHealth(double hp_lost) {
+        current_hp -= hp_lost;
+        health.setPartialHealth(current_hp);
+    }
+
+    public boolean isDead() {
+        return full_hp <= 0;
     }
 }

@@ -30,11 +30,11 @@ public class Asteroid implements Mappable {
         this.radius = radius;
         full_hp = radius * 3.1415926f;
         current_hp = full_hp;
-        //virtual_x_position = random() * SpaceWarViewController.SCREEN_WIDTH;
-        //virtual_y_position = random() * SpaceWarViewController.SCREEN_HEIGHT;
+        virtual_x_position = random() * SpaceWarViewController.SCREEN_WIDTH;
+        virtual_y_position = random() * SpaceWarViewController.SCREEN_HEIGHT;
 
-        virtual_x_position = 550;
-        virtual_y_position = 330;
+        //virtual_x_position = 550;
+        //virtual_y_position = 330;
 
         velocity = 3;
         direction = random() * 360;

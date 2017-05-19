@@ -77,6 +77,14 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
         for (Asteroid asteroid:asteroids) {
             asteroid.draw(g);
         }
+
+        System.out.println(user_spaceship.getMappableX() + ", " + user_spaceship.getMappableY());
+        if (user_spaceship.getMappableX() <= 430) {
+            g.drawRect(340 - user_spaceship.getMappableX(), 0, 1, SCREEN_HEIGHT);
+        }
+        if (user_spaceship.getMappableY() <= 230) {
+            g.drawRect(0, user_spaceship.getMappableY() - 225, SCREEN_WIDTH, 1);
+        }
     }
 
     @Override
@@ -111,7 +119,7 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
 
     @Override
     public void mouseDragged(MouseEvent e){
-        if (tick_numeric % 10 == 0) {
+        if (tick_numeric % 20 == 0) {
             Bullet bullet = new Bullet(user_spaceship.getAngle(), DEFAULT_BULLET_VELOCITY, user_spaceship.getVirtualX(), user_spaceship.getVirtualY(), 20.);
             bullets.add(bullet);
         }
@@ -148,8 +156,16 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
             }
         }
 
-        if (tick_numeric % 20 == 0 && asteroids.size() < 1) {
+        if (tick_numeric % 20 == 0 && asteroids.size() < 10) {
             asteroids.add(new Asteroid(60));
+        }
+
+        if (user_spaceship.getMappableX() <= 0 || user_spaceship.getMappableY() <= 0) {
+            user_spaceship.reduceHealth(.1);
+        }
+
+        if (user_spaceship.current_hp <= 0) {
+            timer.stop();
         }
     }
 }
