@@ -26,6 +26,8 @@ public class UserSpaceship extends Spaceship {
     }
 
     public void draw(Graphics g, int mouse_x, int mouse_y) {
+        g.setColor(new Color(255, 255, 255));
+
         double x_fraction = mouse_x-virtual_x_position;
         double y_fraction = mouse_y-virtual_y_position;
         angle = (StrictMath.toDegrees(StrictMath.atan(x_fraction/y_fraction)));
@@ -33,7 +35,7 @@ public class UserSpaceship extends Spaceship {
             angle += 180;
         }
         Triangle.draw(g, virtual_x_position, virtual_y_position, angle);
-        health.draw(g, virtual_x_position, virtual_y_position);
+        health.draw(g, virtual_x_position+15, virtual_y_position+15);
     }
 
     public void updateLocation() {

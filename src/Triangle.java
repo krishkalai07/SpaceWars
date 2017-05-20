@@ -11,8 +11,6 @@ import static java.lang.StrictMath.toRadians;
  */
 public class Triangle {
     public static strictfp void draw(Graphics g, int origin_x, int origin_y, double heading) {
-        g.setColor(new Color(255,255,255));
-
         int radius = 20;
         int []triangle_x = {(int)(origin_x + radius * sin(toRadians(heading+180))),
                 (int)(origin_x + radius * sin(toRadians(heading+120+180))),

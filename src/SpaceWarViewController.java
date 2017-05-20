@@ -35,7 +35,8 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        user_spaceship = new UserSpaceship(700-20, 430-40);
+        user_spaceship = new UserSpaceship(700, 430);
+
         bullets = new Vector<>();
         asteroids = new Vector<>();
         enemy_spaceships = new Vector<>();
@@ -51,7 +52,7 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
 
         map.set(user_spaceship, Map.MAP_WIDTH/2, Map.MAP_HEIGHT/2);
 
-        EnemySpaceship spaceship = new EnemySpaceship(90, 50, 90);
+        EnemySpaceship spaceship = new EnemySpaceship(270, 50, 90);
         map.set(spaceship, 50, 90);
         enemy_spaceships.add(spaceship);
     }
@@ -59,6 +60,7 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
         user_spaceship.draw(g, mouse_x, mouse_y);
         user_spaceship.updateLocation();
         for (int i = 0; i < bullets.size();) {
@@ -69,21 +71,38 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
                 i++;
             }
         }
+
         for (Bullet bullet:bullets) {
             bullet.draw(g);
             bullet.updatePosition();
         }
-        //((EnemySpaceship)(enemy_spaceships.get(0))).draw(g, );
-        for (Asteroid asteroid:asteroids) {
-            asteroid.draw(g);
-        }
 
-        System.out.println(user_spaceship.getMappableX() + ", " + user_spaceship.getMappableY());
+        for (Spaceship spaceship: enemy_spaceships) {
+            EnemySpaceship enemySpaceship = (EnemySpaceship)spaceship;
+            System.out.println("enemy: " + enemySpaceship.getMappableX() + ", " + enemySpaceship.getMappableY());
+            double[] distance = enemySpaceship.distanceFrom(user_spaceship.getMappableX(), user_spaceship.getMappableY());
+            System.out.println(java.util.Arrays.toString(distance));
+            if (Math.abs(distance[0]) <= user_spaceship.getVirtualX() && Math.abs(distance[1]) <= user_spaceship.getVirtualY()) {
+                enemySpaceship.draw(g, (int) distance[0], (int) distance[1]);
+            }
+        }
+//        for (Asteroid asteroid:asteroids) {
+//            asteroid.draw(g);
+//        }
+
+        g.setColor(new Color(0xFF0000));
+        System.out.println("user: " + user_spaceship.getMappableX() + ", " + user_spaceship.getMappableY());
         if (user_spaceship.getMappableX() <= 430) {
-            g.drawRect(340 - user_spaceship.getMappableX(), 0, 1, SCREEN_HEIGHT);
+            g.drawRect((int)(340 - user_spaceship.getMappableX()), 0, 1, SCREEN_HEIGHT);
         }
         if (user_spaceship.getMappableY() <= 230) {
-            g.drawRect(0, user_spaceship.getMappableY() - 225, SCREEN_WIDTH, 1);
+            g.drawRect(0, (int)(195 - user_spaceship.getMappableY()), SCREEN_WIDTH, 1);
+        }
+        if (user_spaceship.getMappableX() >= 970) {
+            g.drawRect((int)(1740 - user_spaceship.getMappableX()), 0, 1, SCREEN_HEIGHT);
+        }
+        if (user_spaceship.getMappableY() >= 630) {
+            g.drawRect(0, (int)(1055 - user_spaceship.getMappableY()), SCREEN_WIDTH, 1);
         }
     }
 
@@ -96,6 +115,7 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
 
     @Override
     public void mousePressed(MouseEvent e) {
+
     }
 
     @Override
@@ -160,7 +180,13 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
             asteroids.add(new Asteroid(60));
         }
 
-        if (user_spaceship.getMappableX() <= 0 || user_spaceship.getMappableY() <= 0) {
+        for (int i = 0; i < enemy_spaceships.size(); i++) {
+            EnemySpaceship enemy_spaceship = ((EnemySpaceship)(enemy_spaceships.get(i)));
+            enemy_spaceship.updateLocation();
+        }
+
+        if (user_spaceship.getMappableX() <= 0 || user_spaceship.getMappableX() >= Map.MAP_WIDTH ||
+            user_spaceship.getMappableY() >= Map.MAP_HEIGHT || user_spaceship.getMappableY() <= 0) {
             user_spaceship.reduceHealth(.1);
         }
 

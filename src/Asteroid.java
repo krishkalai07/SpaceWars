@@ -65,7 +65,7 @@ public class Asteroid implements Mappable {
     }
 
     public boolean isInsideCircle(int x, int y) {
-        System.out.println(pow (x-virtual_x_position,2) + pow (y-virtual_y_position,2) + " " + pow(radius,2));
+        //System.out.println(pow (x-virtual_x_position,2) + pow (y-virtual_y_position,2) + " " + pow(radius,2));
         return pow (x-virtual_x_position,2) + pow (y-virtual_y_position,2) <= pow(radius,2);
     }
 }
