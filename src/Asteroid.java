@@ -39,8 +39,8 @@ public class Asteroid implements Mappable {
         velocity = 3;
         direction = random() * 360;
 
-        mappable_x_position = (int)(Math.random() * Map.MAP_WIDTH);
-        mappable_y_position = (int)(Math.random() * Map.MAP_HEIGHT);
+        mappable_x_position = (int)(Math.random() * 1400);
+        mappable_y_position = (int)(Math.random() * 860);
 
         health_bar = new HPBar((int)full_hp, (int)current_hp);
     }
@@ -65,7 +65,6 @@ public class Asteroid implements Mappable {
     }
 
     public boolean isInsideCircle(int x, int y) {
-        //System.out.println(pow (x-virtual_x_position,2) + pow (y-virtual_y_position,2) + " " + pow(radius,2));
         return pow (x-virtual_x_position,2) + pow (y-virtual_y_position,2) <= pow(radius,2);
     }
 }

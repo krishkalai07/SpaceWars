@@ -19,6 +19,7 @@ public class HPBar {
     }
 
     public void draw(Graphics g, int item_location_x, int item_location_y) {
+        g.setColor(new Color(0xFFFFFF));
         g.drawRect(item_location_x, item_location_y, 60, 5);
         g.fillRect(item_location_x, item_location_y, (int)(partial_health/full_health * 60), 5);
     }

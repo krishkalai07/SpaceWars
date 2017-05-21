@@ -14,8 +14,8 @@ public class UserSpaceship extends Spaceship {
         virtual_x_position = screen_width/2;
         virtual_y_position = screen_height/2;
 
-        mappable_x_position = Map.MAP_WIDTH/2;
-        mappable_y_position = Map.MAP_HEIGHT/2;
+        mappable_x_position = 700;
+        mappable_y_position = 430;
 
         velocity = 2;
 

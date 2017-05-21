@@ -10,7 +10,8 @@ import static java.lang.StrictMath.toRadians;
  * VERSION: 1
  */
 public class Triangle {
-    public static strictfp void draw(Graphics g, int origin_x, int origin_y, double heading) {
+
+    public static strictfp int[][] draw(Graphics g, int origin_x, int origin_y, double heading) {
         int radius = 20;
         int []triangle_x = {(int)(origin_x + radius * sin(toRadians(heading+180))),
                 (int)(origin_x + radius * sin(toRadians(heading+120+180))),
@@ -28,10 +29,8 @@ public class Triangle {
                 (int)(origin_y + (radius/2) * cos(toRadians(heading+240)))};
 
         g.drawPolygon(triangle_x2, triangle_y2, 3);
-    }
 
-    public boolean isPointInsideTriangle() {
-
-        return false;
+        int[][] arr = {triangle_x, triangle_y};
+        return arr;
     }
 }
