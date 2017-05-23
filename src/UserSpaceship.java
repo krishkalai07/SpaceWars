@@ -1,9 +1,5 @@
 import java.awt.*;
 
-import static java.lang.StrictMath.cos;
-import static java.lang.StrictMath.sin;
-import static java.lang.StrictMath.toRadians;
-
 /**
  * AUTHOR:  Krish Kalai
  * Date:    5/16/17
@@ -23,6 +19,8 @@ public class UserSpaceship extends Spaceship {
         current_hp = full_hp;
 
         health = new HPBar(100, 100);
+
+        angle = 0;
     }
 
     public void draw(Graphics g, int mouse_x, int mouse_y) {
@@ -35,6 +33,7 @@ public class UserSpaceship extends Spaceship {
             angle += 180;
         }
         Triangle.draw(g, virtual_x_position, virtual_y_position, angle);
+
         health.draw(g, virtual_x_position+15, virtual_y_position+15);
     }
 
@@ -51,4 +50,5 @@ public class UserSpaceship extends Spaceship {
     public boolean isDead() {
         return full_hp <= 0;
     }
+
 }

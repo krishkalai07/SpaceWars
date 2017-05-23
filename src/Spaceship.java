@@ -7,6 +7,7 @@ import static java.lang.Math.min;
  * VERSION: 1
  */
 public abstract class Spaceship implements Mappable {
+
     protected int virtual_x_position;
     protected int virtual_y_position;
     protected double mappable_x_position;
@@ -30,11 +31,11 @@ public abstract class Spaceship implements Mappable {
         return ret_arr;
     }
 
-    public boolean isPointInsideTriangle(int x, int y) {
+    public boolean isPointInsideTriangle(double x, double y) {
         int counter = 0;
         int i;
         double x_intercept;
-        int x1, y1, x2, y2;
+        double x1, y1, x2, y2;
 
         x1 = x_coords[0];
         y1 = y_coords[0];
@@ -57,6 +58,13 @@ public abstract class Spaceship implements Mappable {
             y1 = y2;
         }
         return counter % 2 != 0;
+    }
+
+    public boolean isPointinsideCircle(int x, int y) {
+        //System.out.println(x + ", " + y);;
+        //System.out.printf(Math.pow(x-virtual_y_position,2) + Math.pow(y-virtual_y_position,2) + " ");
+        //System.out.println(Math.pow(20,2));
+        return Math.pow(x-virtual_x_position,2) + Math.pow(y-virtual_y_position,2) <= Math.pow(20,2);
     }
 
     public double getAngle() {
@@ -85,5 +93,10 @@ public abstract class Spaceship implements Mappable {
 
     public void setYCoords(int[] y_coords) {
         this.y_coords = y_coords;
+    }
+
+    public void setVelocity(double velocity) {
+        System.out.println(velocity);
+        this.velocity = velocity;
     }
 }

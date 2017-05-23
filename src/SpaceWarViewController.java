@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -11,10 +10,15 @@ import java.util.Vector;
  * VERSION: 1
  */
 public class SpaceWarViewController extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
-    public transient static final int DEFAULT_BULLET_VELOCITY = 4;
-    public transient static final int SCREEN_WIDTH = 700;
-    public transient static final int SCREEN_HEIGHT = 430;
-    //public static final int NUMBER_OF_ENEMIES = 5;
+    public static final int SCREEN_WIDTH = 700;
+    public static final int SCREEN_HEIGHT = 450;
+    public static final int MAP_WIDTH = SCREEN_WIDTH * 2;
+    public static final int MAP_HEIGHT = SCREEN_HEIGHT * 2;
+
+    public static final int NUMBER_OF_ENEMIES = 5;
+    public static final int NUMBER_OF_ASTEROIDS = 10;
+
+    private boolean did_begin;
 
     private Vector<Bullet> bullets;
     private Vector<Asteroid> asteroids;
@@ -33,11 +37,13 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        user_spaceship = new UserSpaceship(700, 430);
+        did_begin = false;
+
+        user_spaceship = new UserSpaceship(SCREEN_WIDTH, SCREEN_HEIGHT);
 
         bullets = new Vector<>();
-        asteroids = new Vector<>();
-        enemy_spaceships = new Vector<>();
+        asteroids = new Vector<>(NUMBER_OF_ASTEROIDS);
+        enemy_spaceships = new Vector<>(NUMBER_OF_ENEMIES);
 
         mouse_x = 0;
         mouse_y = 0;
@@ -46,10 +52,12 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
         timer = new Timer(20, this);
         timer.start();
 
-        for (int i = 0; i < 5; i++) {
-            EnemySpaceship spaceship = new EnemySpaceship(270, 50, i*90);
+        for (int i = 1; i <= NUMBER_OF_ENEMIES; i++) {
+            EnemySpaceship spaceship = new EnemySpaceship(270, 400, i*((MAP_HEIGHT)/(NUMBER_OF_ENEMIES+1)));
+            //EnemySpaceship spaceship = new EnemySpaceship(90, 1400, 860);
             enemy_spaceships.add(spaceship);
         }
+        //enemy_spaceships.add(new EnemySpaceship(0, 680, 180));
     }
 
     @Override
@@ -59,43 +67,54 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
         user_spaceship.draw(g, mouse_x, mouse_y);
         user_spaceship.updateLocation();
 
-        for (Bullet bullet:bullets) {
+        for (Bullet bullet : bullets) {
             bullet.draw(g);
             bullet.updatePosition();
         }
 
-        for (Spaceship spaceship: enemy_spaceships) {
-            EnemySpaceship enemySpaceship = (EnemySpaceship)spaceship;
+        for (Spaceship spaceship : enemy_spaceships) {
+            EnemySpaceship enemySpaceship = (EnemySpaceship) spaceship;
             double[] distance = enemySpaceship.distanceFrom(user_spaceship.getMappableX(), user_spaceship.getMappableY());
             if (Math.abs(distance[0]) <= user_spaceship.getVirtualX() && Math.abs(distance[1]) <= user_spaceship.getVirtualY()) {
                 enemySpaceship.draw(g, (int) distance[0], (int) distance[1]);
             }
         }
-//        for (Asteroid asteroid:asteroids) {
-//            asteroid.draw(g);
-//        }
+
+        for (Asteroid asteroid : asteroids) {
+            //asteroid.draw(g, asteroid.getMappableXPosition() - user_spaceship.getMappableX(), asteroid.getMappableYPosition() - user_spaceship.getMappableY());
+        }
 
         g.setColor(new Color(0xFF0000));
         if (user_spaceship.getMappableX() <= 430) {
-            g.drawRect((int)(340 - user_spaceship.getMappableX()), 0, 1, SCREEN_HEIGHT);
+            g.drawRect((int) (355 - user_spaceship.getMappableX()), 0, 1, SCREEN_HEIGHT);
         }
-        if (user_spaceship.getMappableY() <= 230) {
-            g.drawRect(0, (int)(195 - user_spaceship.getMappableY()), SCREEN_WIDTH, 1);
+        if (user_spaceship.getMappableY() <= 215) {
+            g.drawRect(0, (int) (225 - user_spaceship.getMappableY()), SCREEN_WIDTH, 1);
         }
-        if (user_spaceship.getMappableX() >= 970) {
-            g.drawRect((int)(1740 - user_spaceship.getMappableX()), 0, 1, SCREEN_HEIGHT);
+        if (user_spaceship.getMappableX() >= SCREEN_WIDTH - 430) {
+            g.drawRect((int) (1750 - user_spaceship.getMappableX()), 0, 1, SCREEN_HEIGHT);
         }
-        if (user_spaceship.getMappableY() >= 630) {
-            g.drawRect(0, (int)(1055 - user_spaceship.getMappableY()), SCREEN_WIDTH, 1);
+        if (user_spaceship.getMappableY() >= MAP_HEIGHT - 215) {
+            g.drawRect(0, (int) (1090 - user_spaceship.getMappableY()), SCREEN_WIDTH, 1);
         }
+
+        g.setColor(new Color(128, 128, 128, 128));
+        for (int i = 1; i < SCREEN_WIDTH / 25; i++) {
+            g.drawRect((int) (((i + 7) * 50) - user_spaceship.getMappableX()+5), 0, 1, SCREEN_HEIGHT);
+        }
+        for (int i = 1; i < SCREEN_HEIGHT / 25; i++) {
+            g.drawRect(0, (int) (((i + 4) * 50) - user_spaceship.getMappableY()), SCREEN_WIDTH, 1);
+        }
+
 
         g.setColor(Color.WHITE);
         g.drawString(user_spaceship.mappable_x_position + ", " + user_spaceship.mappable_y_position, 0, 12);
+
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        Bullet bullet = new Bullet(user_spaceship.getAngle(), DEFAULT_BULLET_VELOCITY, user_spaceship.getVirtualX(), user_spaceship.getVirtualY(), 20., user_spaceship);
+        Bullet bullet = new Bullet(user_spaceship.getAngle(), user_spaceship.getVirtualX(), user_spaceship.getVirtualY(), 20., user_spaceship);
         bullets.add(bullet);
         repaint();
     }
@@ -127,7 +146,7 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
     @Override
     public void mouseDragged(MouseEvent e){
         if (tick_numeric % 20 == 0) {
-            Bullet bullet = new Bullet(user_spaceship.getAngle(), DEFAULT_BULLET_VELOCITY, user_spaceship.getVirtualX(), user_spaceship.getVirtualY(), 20., user_spaceship);
+            Bullet bullet = new Bullet(user_spaceship.getAngle(), user_spaceship.getVirtualX(), user_spaceship.getVirtualY(), 20., user_spaceship);
             bullets.add(bullet);
         }
         mouse_x = e.getX();
@@ -138,6 +157,10 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
     public void mouseMoved(MouseEvent e) {
         mouse_x = e.getX();
         mouse_y = e.getY();
+        double distance_from_origin = Math.sqrt(Math.pow(mouse_x - user_spaceship.getVirtualX(), 2) + Math.pow(mouse_y - user_spaceship.getVirtualY(),2));
+        double t = (4*(distance_from_origin/(SCREEN_HEIGHT/2)));
+        user_spaceship.setVelocity(t);
+        //((b-a)(x-min))/(max-min) + a
     }
 
     //
@@ -148,10 +171,15 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
     public void actionPerformed(ActionEvent e) {
         repaint();
         tick_numeric++;
+        //System.out.println(tick_numeric);
 
-        for(Asteroid asteroid:asteroids) {
+        if (!did_begin) {
+
+        }
+
+        for (Asteroid asteroid: asteroids) {
             for (int j = 0; j < bullets.size(); j++) {
-                if (asteroid.isInsideCircle((int)bullets.get(j).getXPosition(), (int)bullets.get(j).getYPosition())) {
+                if (asteroid.isInsideCircle((int)bullets.get(j).getVirtualXPosition(), (int)bullets.get(j).getVirtualYPosition())) {
                     asteroid.updateHP(bullets.get(j).getDamage());
                     bullets.remove(j);
                 }
@@ -162,7 +190,7 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
             EnemySpaceship enemy_spaceship = (EnemySpaceship)spaceship;
             for (int i = 0; i < bullets.size(); i++) {
                 if (Math.abs(enemy_spaceship.getMappableX() - user_spaceship.getMappableX()) <= 200 && Math.abs(enemy_spaceship.getMappableY() - user_spaceship.getMappableY()) <= 200) {
-                    if (enemy_spaceship.isPointInsideTriangle((int) bullets.get(i).getVirtualXPosition(), (int) bullets.get(i).getVirtualYPosition())) {
+                    if (enemy_spaceship.isPointinsideCircle((int)bullets.get(i).getVirtualXPosition(), (int)bullets.get(i).getVirtualYPosition())) {
                         enemy_spaceship.updateHealth(bullets.get(i).getDamage());
                         bullets.remove(i);
                     }
@@ -183,16 +211,30 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
             }
         }
 
-        if (tick_numeric % 20 == 0 && asteroids.size() < 10) {
-            asteroids.add(new Asteroid(60));
+        if (tick_numeric % 20 == 0 && asteroids.size() < NUMBER_OF_ASTEROIDS) {
+            asteroids.add(new Asteroid((int)(Math.random() * 60) + 20));
         }
 
-        for (int i = 0; i < enemy_spaceships.size(); i++) {
-            EnemySpaceship enemy_spaceship = ((EnemySpaceship)(enemy_spaceships.get(i)));
+        for (Spaceship enemy_spaceship1 : enemy_spaceships) {
+            EnemySpaceship enemy_spaceship = ((EnemySpaceship) enemy_spaceship1);
             enemy_spaceship.updateLocation();
+            if (enemy_spaceship.getTurn()) {
+                if ((tick_numeric - enemy_spaceship.getStartTime()) % 100 == 0) {
+                    enemy_spaceship.setTurn(false);
+                    enemy_spaceship.setStartTime(-1);
+                }
+                if (enemy_spaceship.getStartTime() != -1) {
+                    enemy_spaceship.setStartTime(tick_numeric);
+                }
+            }
         }
 
         for (int i = 0; i < bullets.size();) {
+            if(bullets.get(i).getXPosition() <= 0 || bullets.get(i).getXPosition() >= 1400 ||
+               bullets.get(i).getYPosition() >= 860 || bullets.get(i).getYPosition() <= 0) {
+                bullets.remove(i);
+                continue;
+            }
             if (bullets.get(i).isOutOfBounds()) {
                 bullets.remove(i);
             }
@@ -203,11 +245,15 @@ public class SpaceWarViewController extends JPanel implements MouseListener, Mou
 
         if (user_spaceship.getMappableX() <= 0 || user_spaceship.getMappableX() >= 1400 ||
             user_spaceship.getMappableY() >= 860 || user_spaceship.getMappableY() <= 0) {
-            user_spaceship.reduceHealth(.1);
+            user_spaceship.reduceHealth(0.1);
         }
 
         if (user_spaceship.current_hp <= 0) {
             timer.stop();
         }
+    }
+
+    public UserSpaceship getUserSpaceship() {
+        return user_spaceship;
     }
 }

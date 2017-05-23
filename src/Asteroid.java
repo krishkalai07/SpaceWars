@@ -12,8 +12,8 @@ import static java.lang.StrictMath.toRadians;
  * VERSION: 1
  */
 public class Asteroid implements Mappable {
-    private float full_hp;
-    private float current_hp;
+    private double full_hp;
+    private double current_hp;
     private double velocity;
     private double direction;
 
@@ -21,14 +21,14 @@ public class Asteroid implements Mappable {
     private double virtual_y_position;
     private int radius;
 
-    private int mappable_x_position;
-    private int mappable_y_position;
+    private double mappable_x_position;
+    private double mappable_y_position;
 
-    HPBar health_bar;
+    private HPBar health_bar;
 
     public Asteroid(int radius) {
-        this.radius = radius;
-        full_hp = radius * 3.1415926f;
+        this.radius = 60;
+        full_hp = radius * StrictMath.PI;
         current_hp = full_hp;
         virtual_x_position = random() * SpaceWarViewController.SCREEN_WIDTH;
         virtual_y_position = random() * SpaceWarViewController.SCREEN_HEIGHT;
@@ -45,14 +45,16 @@ public class Asteroid implements Mappable {
         health_bar = new HPBar((int)full_hp, (int)current_hp);
     }
 
-    public void draw(Graphics g) {
+    public void draw(Graphics g, double x_distance_from_user, double y_distance_from_user) {
+        virtual_x_position = x_distance_from_user + 350;
+        virtual_y_position = y_distance_from_user + 220;
         g.drawOval((int) virtual_x_position - radius, (int) virtual_y_position - radius, radius, radius);
         health_bar.draw(g, (int)virtual_x_position, (int)virtual_y_position);
     }
 
     public void updateLocation() {
-        virtual_x_position += velocity* sin(toRadians(direction+180));
-        virtual_y_position += velocity* cos(toRadians(direction+180));
+        mappable_x_position += velocity * sin(toRadians(direction + 180));
+        mappable_y_position += velocity * cos(toRadians(direction + 180));
     }
 
     public boolean hasLostAllHP() {
@@ -65,6 +67,14 @@ public class Asteroid implements Mappable {
     }
 
     public boolean isInsideCircle(int x, int y) {
-        return pow (x-virtual_x_position,2) + pow (y-virtual_y_position,2) <= pow(radius,2);
+        return pow (x-virtual_x_position+radius/2,2) + pow (y-virtual_y_position+radius/2,2) <= pow(radius*0.5,2);
+    }
+
+    public double getMappableXPosition() {
+        return mappable_x_position;
+    }
+
+    public double getMappableYPosition() {
+        return mappable_y_position;
     }
 }
