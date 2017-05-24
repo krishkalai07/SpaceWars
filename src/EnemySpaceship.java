@@ -15,7 +15,7 @@ public class EnemySpaceship extends Spaceship {
         this.mappable_y_position = y_position;
         this.virtual_x_position = -1;
         this.virtual_x_position = -1;
-        this.velocity = 5;
+        this.velocity = 4;
         this.full_hp = 400;
         this.current_hp = 400;
 
@@ -23,6 +23,9 @@ public class EnemySpaceship extends Spaceship {
         this.start_time = -1;
 
         this.health = new HPBar(400, 400);
+
+        this.immune = false;
+        this.immunity_timer = -1;
     }
 
     public void draw(Graphics g, int x_distance_from_user, int y_distance_from_user) {
@@ -43,7 +46,7 @@ public class EnemySpaceship extends Spaceship {
 
         if (mappable_x_position < 270 || mappable_x_position > 1130 || mappable_y_position < 115 || mappable_y_position > 745) {
             if (!turn) {
-                angle += (int)(Math.random() * 2) == 0 ? 45 : -45;
+                angle += (int)(Math.random() * 2) == 0 ? Math.random() * 45.0 : Math.random() * -45.0;
                 turn = true;
             }
         }
@@ -53,11 +56,6 @@ public class EnemySpaceship extends Spaceship {
         }
     }
 
-
-    public void updateHealth(double damage_dealt) {
-        current_hp -= damage_dealt;
-        health.setPartialHealth(current_hp);
-    }
 
     public boolean hasLostAllHP() {
         return current_hp <= 0;

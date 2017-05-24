@@ -21,10 +21,12 @@ public class UserSpaceship extends Spaceship {
         health = new HPBar(100, 100);
 
         angle = 0;
+
+        immunity_timer = -1;
     }
 
     public void draw(Graphics g, int mouse_x, int mouse_y) {
-        g.setColor(new Color(255, 255, 255));
+        g.setColor(new Color(0xFFA000));
 
         double x_fraction = mouse_x-virtual_x_position;
         double y_fraction = mouse_y-virtual_y_position;
@@ -42,13 +44,7 @@ public class UserSpaceship extends Spaceship {
         mappable_y_position += velocity*StrictMath.cos(StrictMath.toRadians(angle+180));
     }
 
-    public void reduceHealth(double hp_lost) {
-        current_hp -= hp_lost;
-        health.setPartialHealth(current_hp);
-    }
-
     public boolean isDead() {
-        return full_hp <= 0;
+        return current_hp <= 0;
     }
-
 }

@@ -35,7 +35,12 @@ public class Bullet implements Mappable {
     }
 
     public void draw(Graphics g) {
-        g.setColor(new Color(0xFFFFFF));
+        if (source instanceof UserSpaceship) {
+            g.setColor(new Color(0xFFFFFF));
+        }
+        if (source instanceof EnemySpaceship) {
+            g.setColor(new Color(255, 0, 0));
+        }
         double x_distance_from_user = this.mappable_x_position - source.mappable_x_position;
         double y_distance_from_user = this.mappable_y_position - source.mappable_y_position;
 

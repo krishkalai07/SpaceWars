@@ -24,6 +24,9 @@ public abstract class Spaceship implements Mappable {
     protected int[] x_coords;
     protected int[] y_coords;
 
+    protected boolean immune;
+    protected int immunity_timer;
+
     public double[] distanceFrom(double x, double y) {
         double[] ret_arr = new double[2];
         ret_arr[0] = x - this.mappable_x_position;
@@ -96,7 +99,22 @@ public abstract class Spaceship implements Mappable {
     }
 
     public void setVelocity(double velocity) {
-        System.out.println(velocity);
+        //System.out.println(velocity);
         this.velocity = velocity;
+    }
+
+    public void reduceHealth(double hp_lost) {
+        if (!immune) {
+            current_hp -= hp_lost;
+            health.setPartialHealth(current_hp);
+        }
+        else {
+            current_hp -= 0;
+            health.setPartialHealth(current_hp);
+        }
+    }
+
+    public void setImmune(boolean immune) {
+        this.immune = immune;
     }
 }
