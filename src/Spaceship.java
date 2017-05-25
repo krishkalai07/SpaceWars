@@ -117,4 +117,5 @@ public abstract class Spaceship implements Mappable {
     public void setImmune(boolean immune) {
         this.immune = immune;
     }
+
 }

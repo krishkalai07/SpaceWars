@@ -14,6 +14,7 @@ public class Bullet implements Mappable {
     private double direction;
 
     private Spaceship source;
+    private Spaceship user;
     private double source_position_x;
     private double source_position_y;
 
@@ -41,13 +42,23 @@ public class Bullet implements Mappable {
         if (source instanceof EnemySpaceship) {
             g.setColor(new Color(255, 0, 0));
         }
-        double x_distance_from_user = this.mappable_x_position - source.mappable_x_position;
-        double y_distance_from_user = this.mappable_y_position - source.mappable_y_position;
+
+        double x_distance_from_user;
+        double y_distance_from_user;
+
+        if (user != null) {
+             x_distance_from_user = this.mappable_x_position - user.mappable_x_position;
+             y_distance_from_user = this.mappable_y_position - user.mappable_y_position;
+        }
+        else {
+            x_distance_from_user = this.mappable_x_position - source.mappable_x_position;
+            y_distance_from_user = this.mappable_y_position - source.mappable_y_position;
+        }
 
         virtual_x_position = x_distance_from_user + 350;
         virtual_y_position = y_distance_from_user + 220;
 
-        g.drawOval((int) virtual_x_position - 5, (int) virtual_y_position -5, 10, 10);
+        g.drawOval((int) virtual_x_position - 5, (int) virtual_y_position - 5, 10, 10);
     }
 
     public void updatePosition() {
@@ -81,5 +92,13 @@ public class Bullet implements Mappable {
 
     public double getVirtualYPosition() {
         return virtual_y_position;
+    }
+
+    public Spaceship getSource() {
+        return source;
+    }
+
+    public void setUser(Spaceship spaceship) {
+        user = spaceship;
     }
 }

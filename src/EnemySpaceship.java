@@ -15,7 +15,7 @@ public class EnemySpaceship extends Spaceship {
         this.mappable_y_position = y_position;
         this.virtual_x_position = -1;
         this.virtual_x_position = -1;
-        this.velocity = 4;
+        this.velocity = 0;
         this.full_hp = 400;
         this.current_hp = 400;
 
@@ -44,7 +44,7 @@ public class EnemySpaceship extends Spaceship {
         mappable_x_position += velocity*StrictMath.sin(StrictMath.toRadians(angle+180));
         mappable_y_position += velocity*StrictMath.cos(StrictMath.toRadians(angle+180));
 
-        if (mappable_x_position < 270 || mappable_x_position > 1130 || mappable_y_position < 115 || mappable_y_position > 745) {
+        if (mappable_x_position < 270 || mappable_x_position > 1130 || mappable_y_position < 115 || mappable_y_position > 785) {
             if (!turn) {
                 angle += (int)(Math.random() * 2) == 0 ? Math.random() * 45.0 : Math.random() * -45.0;
                 turn = true;
