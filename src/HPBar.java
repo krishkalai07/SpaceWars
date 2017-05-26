@@ -5,9 +5,10 @@ import java.awt.*;
  * Date:    5/17/17
  * VERSION: 1
  */
+@SuppressWarnings("ALL")
 public class HPBar {
-    double full_health;
-    double partial_health;
+    private double full_health;
+    private double partial_health;
 
     HPBar(int partial_health, int full_health) {
         this.partial_health = partial_health;

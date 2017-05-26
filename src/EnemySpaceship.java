@@ -5,6 +5,7 @@ import java.awt.*;
  * Date:    5/16/17
  * VERSION: 1
  */
+@SuppressWarnings("ALL")
 public class EnemySpaceship extends Spaceship {
     private int start_time;
     private boolean turn;
@@ -13,14 +14,9 @@ public class EnemySpaceship extends Spaceship {
         this.angle = angle;
         this.mappable_x_position = x_position;
         this.mappable_y_position = y_position;
-        this.virtual_x_position = -1;
-        this.virtual_x_position = -1;
-        this.velocity = 0;
+        this.velocity = 5;
         this.full_hp = 400;
         this.current_hp = 400;
-
-        this.turn = false;
-        this.start_time = -1;
 
         this.health = new HPBar(400, 400);
 
@@ -30,14 +26,8 @@ public class EnemySpaceship extends Spaceship {
 
     public void draw(Graphics g, int x_distance_from_user, int y_distance_from_user) {
         g.setColor(new Color(0xFF0000));
-
-        virtual_x_position = -x_distance_from_user + 350;
-        virtual_y_position = -y_distance_from_user + 220;
-        int[][] point = Triangle.draw(g, virtual_x_position, virtual_y_position, angle);
-        x_coords = point[0];
-        y_coords = point[1];
-
-        health.draw(g, virtual_x_position+20, virtual_y_position+20);
+        Triangle.draw(g, -x_distance_from_user + 350, -y_distance_from_user + 220, getAngle());
+        health.draw(g, -x_distance_from_user + 370, -y_distance_from_user + 240);
     }
 
     public void updateLocation() {
