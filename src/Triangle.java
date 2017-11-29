@@ -1,5 +1,3 @@
-import org.jetbrains.annotations.NotNull;
-
 import java.awt.*;
 
 import static java.lang.StrictMath.*;
@@ -11,8 +9,7 @@ import static java.lang.StrictMath.*;
  */
 @SuppressWarnings("ALL")
 public class Triangle {
-    @NotNull
-    public static strictfp int[][] draw(Graphics g, int origin_x, int origin_y, double heading) {
+    public static int[][] draw(Graphics g, int origin_x, int origin_y, double heading) {
         int radius = 20;
         int []triangle_x = {(int)(origin_x + radius * sin(toRadians(heading+180))),
                             (int)(origin_x + radius * sin(toRadians(heading+120+180))),

@@ -1,8 +1,4 @@
-/**
- * AUTHOR:  Krish Kalai
- * Date:    5/5/17
- * VERSION: 1
- */
+
 @SuppressWarnings("ALL")
 public abstract class Spaceship implements Mappable {
     protected double mappable_x_position;

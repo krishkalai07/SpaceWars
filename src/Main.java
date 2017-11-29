@@ -5,20 +5,6 @@ import javax.swing.*;
  */
 public class Main {
     public static void main(String[] argv) {
-        /*
-        int origin_x = 150;
-        int origin_y = 125;
-
-        int forward_theta = 45;
-
-        int radius = 20;
-
-        double circle_point_x = (origin_x + radius * StrictMath.sin(forward_theta));
-        double circle_point_y = (origin_y + radius * StrictMath.cos(forward_theta));
-
-        System.out.println(circle_point_x + " " + circle_point_y);
-        */
-
         JFrame window = new JFrame("Space Wars");
         SpaceWarViewController content = new SpaceWarViewController();
         window.setContentPane(content);
